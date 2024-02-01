@@ -1,0 +1,5 @@
+id: jspna26ssrvlk65g3m3x2mn4sf6hzkxi4x58czhns9yuccsp
+name: errno
+main: errno.zig
+license: MIT
+dependencies:
