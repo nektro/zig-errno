@@ -4,47 +4,33 @@ const builtin = @import("builtin");
 
 pub const c = switch (builtin.target.os.tag) {
     .linux => switch (builtin.target.cpu.arch) {
-        // arc
         .arc,
-        // arm
         .arm,
         .armeb,
-        // arm64
         .aarch64,
         .aarch64_be,
         .aarch64_32,
-        // csky
         .csky,
-        // hexagon
         .hexagon,
-        // loongarch
         .loongarch32,
         .loongarch64,
-        // m68k
         .m68k,
-        // mips
         .mips,
         .mipsel,
         .mips64,
         .mips64el,
-        // powerpc
         .powerpc,
         .powerpcle,
         .powerpc64,
         .powerpc64le,
-        // riscv
         .riscv32,
         .riscv64,
-        // s390
         .s390x,
-        // sparc
         .sparc,
         .sparc64,
         .sparcel,
-        // x86
         .x86,
         .x86_64,
-        // xtensa
         .xtensa,
         => opaque {
             pub const EPERM = 1;
