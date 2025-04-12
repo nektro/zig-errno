@@ -4,8 +4,48 @@ const builtin = @import("builtin");
 
 pub const c = switch (builtin.target.os.tag) {
     .linux => switch (builtin.target.cpu.arch) {
+        // arc
+        .arc,
+        // arm
+        .arm,
+        .armeb,
+        // arm64
+        .aarch64,
+        .aarch64_be,
+        .aarch64_32,
+        // csky
+        .csky,
+        // hexagon
+        .hexagon,
+        // loongarch
+        .loongarch32,
+        .loongarch64,
+        // m68k
+        .m68k,
+        // mips
+        .mips,
+        .mipsel,
+        .mips64,
+        .mips64el,
+        // powerpc
+        .powerpc,
+        .powerpcle,
+        .powerpc64,
+        .powerpc64le,
+        // riscv
+        .riscv32,
+        .riscv64,
+        // s390
+        .s390x,
+        // sparc
+        .sparc,
+        .sparc64,
+        .sparcel,
+        // x86
         .x86,
         .x86_64,
+        // xtensa
+        .xtensa,
         => opaque {
             pub const EPERM = 1;
             pub const ENOENT = 2;
@@ -142,7 +182,49 @@ pub const c = switch (builtin.target.os.tag) {
             pub const ERFKILL = 132;
             pub const EHWPOISON = 133;
         },
-        else => |v| @compileError("TODO: " ++ @tagName(v)),
+        // alpha
+        // nios2
+        // microblaze
+        // openrisc
+        // parisc
+        // sh
+        // um
+        // @compileError("TODO: " ++ @tagName(v)),
+        .avr,
+        .bpfel,
+        .bpfeb,
+        .dxil,
+        .msp430,
+        .r600,
+        .amdgcn,
+        .tce,
+        .tcele,
+        .thumb,
+        .thumbeb,
+        .xcore,
+        .nvptx,
+        .nvptx64,
+        .le32,
+        .le64,
+        .amdil,
+        .amdil64,
+        .hsail,
+        .hsail64,
+        .spir,
+        .spir64,
+        .spirv,
+        .spirv32,
+        .spirv64,
+        .kalimba,
+        .shave,
+        .lanai,
+        .wasm32,
+        .wasm64,
+        .renderscript32,
+        .renderscript64,
+        .ve,
+        .spu_2,
+        => |v| @compileError("TODO: " ++ @tagName(v)),
     },
     else => |v| @compileError("TODO: " ++ @tagName(v)),
 };
