@@ -182,6 +182,8 @@ pub fn error_by_name(name: string) ?Error {
 const __errno_location_name = switch (builtin.target.os.tag) {
     .linux,
     => "__errno_location",
+    .macos,
+    => "__error",
     else => |v| @compileError("TODO: " ++ @tagName(v)),
 };
 
