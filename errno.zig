@@ -224,7 +224,7 @@ pub const c = switch (builtin.target.os.tag) {
         .renderscript64,
         .ve,
         .spu_2,
-        => |v| @compileError("TODO: " ++ @tagName(v)),
+        => unreachable,
     },
     else => |v| @compileError("TODO: " ++ @tagName(v)),
 };
