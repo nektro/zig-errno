@@ -4,6 +4,7 @@ const builtin = @import("builtin");
 
 pub const c = switch (builtin.target.os.tag) {
     .linux => switch (builtin.target.cpu.arch) {
+        .x86,
         .x86_64,
         => opaque {
             pub const EPERM = 1;
