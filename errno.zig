@@ -215,7 +215,7 @@ pub const Enum = enum(c_uint) {
 
 pub const IntsMap = std.EnumMap(Enum, c_uint);
 
-pub const ints_maps = blk: {
+pub const ints_map = blk: {
     var ints = IntsMap{};
     for (std.meta.fields(Enum)) |field| {
         if (!@hasDecl(c, field.name)) continue;
