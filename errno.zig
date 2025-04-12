@@ -226,18 +226,19 @@ pub const ints_map = blk: {
 
 pub const Error = blk: {
     const Type = std.builtin.Type;
-    var errors: []const Type.Error = &.{};
-    for (std.meta.fields(Enum)) |field| {
-        errors = errors ++ &[_]Type.Error{.{ .name = field.name }};
+    const fields = std.meta.fields(Enum);
+    var errors: [fields.len]Type.Error = undefined;
+    for (fields, 0..) |field, i| {
+        errors[i] = .{ .name = field.name };
     }
-    errors = errors ++ &[_]Type.Error{.{ .name = "Unexpected" }};
-    break :blk @Type(@unionInit(Type, "ErrorSet", errors));
+    errors[fields.len - 1] = .{ .name = "Unexpected" };
+    break :blk @Type(@unionInit(Type, "ErrorSet", &errors));
 };
 
 pub fn error_by_name(name: string) ?Error {
-    inline for (comptime std.meta.fields(Error)) |field| {
-        if (std.mem.eql(u8, name, field.name)) {
-            return @field(Error, field.name);
+    inline for (comptime std.meta.fieldNames(Error)) |field_name| {
+        if (std.mem.eql(u8, name, field_name)) {
+            return @field(Error, field_name);
         }
     }
     return null;
