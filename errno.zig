@@ -178,3 +178,18 @@ pub fn error_by_name(name: string) ?Error {
     }
     return null;
 }
+
+const __errno_location_name = switch (builtin.target.os.tag) {
+    .linux,
+    => "__errno_location",
+    else => |v| @compileError("TODO: " ++ @tagName(v)),
+};
+
+const __errno_location = @extern(*const fn () callconv(.C) *c_int, std.builtin.ExternOptions{
+    .name = __errno_location_name,
+    .library_name = "c",
+});
+
+pub fn get_from_libc() c_int {
+    return __errno_location().*;
+}

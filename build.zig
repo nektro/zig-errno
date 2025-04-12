@@ -13,6 +13,7 @@ pub fn build(b: *std.Build) void {
         .optimize = mode,
     });
     tests.root_module.addImport("errno", mod);
+    tests.root_module.link_libc = true;
     tests.use_llvm = !disable_llvm;
     tests.use_lld = !disable_llvm;
 

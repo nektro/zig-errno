@@ -7,3 +7,8 @@ test {
 
     try std.testing.expectEqual(b, a);
 }
+
+test {
+    const e = errno.get_from_libc();
+    try std.testing.expectEqual(0, e);
+}
