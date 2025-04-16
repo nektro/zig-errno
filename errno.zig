@@ -2,7 +2,7 @@ const std = @import("std");
 const string = []const u8;
 const builtin = @import("builtin");
 
-pub const c = switch (builtin.target.os.tag) {
+pub const Enum = switch (builtin.target.os.tag) {
     .linux => switch (builtin.target.cpu.arch) {
         .arc,
         .arm,
@@ -24,7 +24,7 @@ pub const c = switch (builtin.target.os.tag) {
         .x86,
         .x86_64,
         .xtensa,
-        => opaque {
+        => enum(c_ushort) {
             pub const EPERM = 1;
             pub const ENOENT = 2;
             pub const ESRCH = 3;
@@ -159,10 +159,11 @@ pub const c = switch (builtin.target.os.tag) {
             pub const ENOTRECOVERABLE = 131;
             pub const ERFKILL = 132;
             pub const EHWPOISON = 133;
+            _,
         },
         .mips,
         .mipsel,
-        => opaque {
+        => enum(c_ushort) {
             pub const EPERM = 1;
             pub const ENOENT = 2;
             pub const ESRCH = 3;
@@ -297,10 +298,11 @@ pub const c = switch (builtin.target.os.tag) {
             pub const ERFKILL = 167;
             pub const EHWPOISON = 168;
             pub const EDQUOT = 1133;
+            _,
         },
         .mips64,
         .mips64el,
-        => opaque {
+        => enum(c_ushort) {
             pub const EPERM = 1;
             pub const ENOENT = 2;
             pub const ESRCH = 3;
@@ -435,10 +437,11 @@ pub const c = switch (builtin.target.os.tag) {
             pub const ERFKILL = 167;
             pub const EHWPOISON = 168;
             pub const EDQUOT = 1133;
+            _,
         },
         .powerpc,
         .powerpcle,
-        => opaque {
+        => enum(c_ushort) {
             pub const EPERM = 1;
             pub const ENOENT = 2;
             pub const ESRCH = 3;
@@ -573,10 +576,11 @@ pub const c = switch (builtin.target.os.tag) {
             pub const ENOTRECOVERABLE = 131;
             pub const ERFKILL = 132;
             pub const EHWPOISON = 133;
+            _,
         },
         .powerpc64,
         .powerpc64le,
-        => opaque {
+        => enum(c_ushort) {
             pub const EPERM = 1;
             pub const ENOENT = 2;
             pub const ESRCH = 3;
@@ -711,6 +715,7 @@ pub const c = switch (builtin.target.os.tag) {
             pub const ENOTRECOVERABLE = 131;
             pub const ERFKILL = 132;
             pub const EHWPOISON = 133;
+            _,
         },
         // alpha
         // nios2
@@ -756,7 +761,7 @@ pub const c = switch (builtin.target.os.tag) {
         .spu_2,
         => unreachable,
     },
-    .macos => opaque {
+    .macos => enum(c_ushort) {
         pub const EPERM = 1;
         pub const ENOENT = 2;
         pub const ESRCH = 3;
@@ -864,8 +869,9 @@ pub const c = switch (builtin.target.os.tag) {
         pub const ENOTRECOVERABLE = 104;
         pub const EOWNERDEAD = 105;
         pub const EQFULL = 106;
+        _,
     },
-    .freebsd => opaque {
+    .freebsd => enum(c_ushort) {
         pub const EPERM = 1;
         pub const ENOENT = 2;
         pub const ESRCH = 3;
@@ -965,8 +971,9 @@ pub const c = switch (builtin.target.os.tag) {
         pub const ENOTRECOVERABLE = 95;
         pub const EOWNERDEAD = 96;
         pub const EINTEGRITY = 97;
+        _,
     },
-    .openbsd => opaque {
+    .openbsd => enum(c_ushort) {
         pub const EPERM = 1;
         pub const ENOENT = 2;
         pub const ESRCH = 3;
@@ -1063,8 +1070,9 @@ pub const c = switch (builtin.target.os.tag) {
         pub const ENOTRECOVERABLE = 93;
         pub const EOWNERDEAD = 94;
         pub const EPROTO = 95;
+        _,
     },
-    .netbsd => opaque {
+    .netbsd => enum(c_ushort) {
         pub const EPERM = 1;
         pub const ENOENT = 2;
         pub const ESRCH = 3;
@@ -1164,15 +1172,14 @@ pub const c = switch (builtin.target.os.tag) {
         pub const EPROTO = 96;
         pub const EOWNERDEAD = 97;
         pub const ENOTRECOVERABLE = 98;
+        _,
     },
     else => |v| @compileError("TODO: " ++ @tagName(v)),
 };
 
-pub const Enum = std.meta.DeclEnum(c);
-
 pub const Error = blk: {
     const Type = std.builtin.Type;
-    const fields = std.meta.fields(Enum);
+    const fields = std.meta.declarations(Enum);
     var errors: [fields.len]Type.Error = undefined;
     for (fields, 0..) |field, i| {
         errors[i] = .{ .name = field.name };
