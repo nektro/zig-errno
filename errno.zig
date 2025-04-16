@@ -1170,17 +1170,6 @@ pub const c = switch (builtin.target.os.tag) {
 
 pub const Enum = std.meta.DeclEnum(c);
 
-pub const IntsMap = std.EnumMap(Enum, c_uint);
-
-pub const ints_map = blk: {
-    var ints = IntsMap{};
-    for (std.meta.fields(Enum)) |field| {
-        if (!@hasDecl(c, field.name)) continue;
-        ints.put(@field(Enum, field.name), @field(c, field.name));
-    }
-    break :blk ints;
-};
-
 pub const Error = blk: {
     const Type = std.builtin.Type;
     const fields = std.meta.fields(Enum);
