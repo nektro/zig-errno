@@ -1180,11 +1180,11 @@ pub const Enum = switch (builtin.target.os.tag) {
 pub const Error = blk: {
     const Type = std.builtin.Type;
     const fields = std.meta.declarations(Enum);
-    var errors: [fields.len]Type.Error = undefined;
+    var errors: [fields.len + 1]Type.Error = undefined;
     for (fields, 0..) |field, i| {
         errors[i] = .{ .name = field.name };
     }
-    errors[fields.len - 1] = .{ .name = "Unexpected" };
+    errors[fields.len] = .{ .name = "Unexpected" };
     break :blk @Type(@unionInit(Type, "ErrorSet", &errors));
 };
 
