@@ -1197,6 +1197,19 @@ pub fn error_by_name(name: string) ?Error {
     return null;
 }
 
+const map = blk: {
+    const KV = struct { string, Error };
+    var kvs: []const KV = &.{};
+    for (std.meta.fields(Enum)) |field| {
+        kvs = kvs ++ &[1]KV{.{ field.name, @field(Error, field.name) }};
+    }
+    break :blk std.StaticStringMap(Error).initComptime(kvs);
+};
+
+pub fn errorFromInt(code: c_int) Error {
+    return map.get(std.enums.tagName(Enum, @enumFromInt(code)) orelse return error.Unexpected).?;
+}
+
 const __errno_location_name = switch (builtin.target.os.tag) {
     .linux,
     => "__errno_location",
