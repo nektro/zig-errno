@@ -1207,6 +1207,23 @@ const map = blk: {
 };
 
 pub fn errorFromInt(code: c_int) Error {
+    const errors_are_seqential = comptime blk: {
+        if (@intFromEnum(Enum.EPERM) != 1) break :blk false;
+        var prev: u16 = @intFromError(Error.EPERM);
+        for (std.meta.fields(Error)[1..]) |field| {
+            const int = @intFromError(@field(anyerror, field.name));
+            if (int != prev + 1) break :blk false;
+            prev = int;
+        }
+        break :blk true;
+    };
+    if (errors_are_seqential) {
+        // avoid an inline for and N comparisons
+        if (code < 1) return error.Unexpected;
+        if (code > std.meta.fields(Enum).len) return error.Unexpected;
+        const ucode: c_ushort = @intCast(code);
+        return @errorCast(@errorFromInt(@intFromError(Error.EPERM) + ucode - @intFromEnum(Enum.EPERM)));
+    }
     return map.get(std.enums.tagName(Enum, @enumFromInt(code)) orelse return error.Unexpected).?;
 }
 
