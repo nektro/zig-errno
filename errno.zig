@@ -9,7 +9,6 @@ pub const Enum = switch (builtin.target.os.tag) {
         .armeb,
         .aarch64,
         .aarch64_be,
-        .aarch64_32,
         .csky,
         .hexagon,
         .loongarch32,
@@ -20,7 +19,6 @@ pub const Enum = switch (builtin.target.os.tag) {
         .s390x,
         .sparc,
         .sparc64,
-        .sparcel,
         .x86,
         .x86_64,
         .xtensa,
@@ -728,37 +726,22 @@ pub const Enum = switch (builtin.target.os.tag) {
         .avr,
         .bpfel,
         .bpfeb,
-        .dxil,
         .msp430,
-        .r600,
         .amdgcn,
-        .tce,
-        .tcele,
         .thumb,
         .thumbeb,
+        .propeller,
         .xcore,
         .nvptx,
         .nvptx64,
-        .le32,
-        .le64,
-        .amdil,
-        .amdil64,
-        .hsail,
-        .hsail64,
-        .spir,
-        .spir64,
         .spirv,
         .spirv32,
         .spirv64,
         .kalimba,
-        .shave,
         .lanai,
         .wasm32,
         .wasm64,
-        .renderscript32,
-        .renderscript64,
         .ve,
-        .spu_2,
         => unreachable,
     },
     .macos => enum(c_ushort) {
@@ -1270,7 +1253,7 @@ pub const Error = blk: {
         errors[i] = .{ .name = field.name };
     }
     errors[fields.len] = .{ .name = "Unexpected" };
-    break :blk @Type(@unionInit(Type, "ErrorSet", &errors));
+    break :blk @Type(@unionInit(Type, "error_set", &errors));
 };
 
 pub fn error_by_name(name: string) ?Error {
